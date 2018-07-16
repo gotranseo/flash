@@ -24,14 +24,14 @@ public struct FlashMiddleware: Middleware, ServiceType {
 
         if let data = session[sessionKey]?.data(using: .utf8) {
             let flash = try JSONDecoder().decode(FlashContainer.self, from: data)
-            let container = try req.privateContainer.make(FlashContainer.self)
+            let container = try req.make(FlashContainer.self)
             container.new = flash.new
             container.old = flash.old
         }
     }
 
     public static func handle(req: Request, resp: Response) throws {
-        let container = try resp.privateContainer.make(FlashContainer.self)
+        let container = try resp.make(FlashContainer.self)
         let flash = try String(
             data: JSONEncoder().encode(container),
             encoding: .utf8
